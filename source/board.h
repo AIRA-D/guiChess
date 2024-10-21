@@ -2,18 +2,17 @@
 #define BOARD_H
 
 #include <QMainWindow>
+#include <QGridLayout>
 #include <QPushButton>
-#include <vector>
+#include <QPushButton>
 #include <QLabel>
+#include <QTimer>
+#include <vector>
+#include "piece.h"
 
 enum Color {
     WHITE,
     BLACK
-};
-
-struct Position {
-    int row;
-    int column;
 };
 
 struct Square {
@@ -21,7 +20,6 @@ struct Square {
     Position squarePosition;
     QPushButton* button;
 };
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Board; }
@@ -35,16 +33,24 @@ public:
     Board(QWidget *parent = nullptr);
     ~Board();
 
+    void initBoard();
+    void initPieces();
+
 private:
     Ui::Board *ui;
 
     std::vector<std::vector<Square>> squares;
-    Position selectedPiecePosition = {-1, -1};
-    QTimer *doubleClickTimer;
+    std::vector<std::vector<Piece*>> pieces;
 
-    void initBoard();
-    void initPieces();
+    Position firstClickedPosition = {-1, -1};
+
+    QTimer *doubleClickTimer;
+    QGridLayout *chessboardLayout;
+    QLabel *horizontalLabel;
+    QLabel *verticalLabel;
+
     void handleButtonClick(int row, int col);
+
 };
 
 #endif // BOARD_H

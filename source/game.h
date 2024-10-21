@@ -1,16 +1,21 @@
 #ifndef GAME_H
 #define GAME_H
 
-class Game
-{
+#include "board.h"
+
+class Game {
 public:
-    Game();
-    ~Game();
+
+    static Game* getInstance(); // Функция получения экземпляра
+    void startGame(); // Функция запуска игры
+    void makeMove(const Position& from, const Position& to); // Метод для выполнения хода
 
 private:
-    void runGame();
-    void updatePosition();
-    void makeMove();
+ // Приватный конструктор
+    Game();
+    ~Game();
+    static Game* instance; // Указатель на единственный экземпляр
+    Board *board;
 };
 
 #endif // GAME_H

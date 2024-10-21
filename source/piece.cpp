@@ -1,52 +1,73 @@
-#ifndef PIECE_H
-#define PIECE_H
+#include "piece.h"
+#include "rook.h"
+#include "knight.h"
+#include "bishop.h"
+#include "queen.h"
+#include "king.h"
+#include "pawn.h"
 
-#include <QIcon>
+Piece* Piece::createPiece(PieceType type, PColor color, Position currentPiecePosition){
+    switch (type) {
+    case ROOK:
+        return new Rook(type, color, currentPiecePosition); // Класс Rook - наследник Piece
+    case KNIGHT:
+        return new Knight(type, color, currentPiecePosition); // Класс Knight - наследник Piece
+    case BISHOP:
+        return new Bishop(type, color, currentPiecePosition); // Класс Bishop - наследник Piece
+    case QUEEN:
+        return new Queen(type, color, currentPiecePosition); // Класс Queen - наследник Piece
+    case KING:
+        return new King(type, color, currentPiecePosition); // Класс King - наследник Piece
+    case PAWN:
+        return new Pawn(type, color, currentPiecePosition); // Класс Pawn - наследник Piece
+    default:
+        return nullptr;
+    }
+}
 
-enum PieceType {
-    ROOK,
-    KNIGHT,
-    BISHOP,
-    QUEEN,
-    KING,
-    PAWN
-};
+Piece::~Piece() {}
 
-enum PColor {
-    WHITE_P,
-    BLACK_P
-};
+void Piece::initIcon() {
+    QString imagePath = "/home/aira/Pictures/chess_images/";
+    switch (type) {
+    case ROOK:
+        icon = (color == WHITE_P)
+                   ? QIcon(imagePath + "WhiteRook.png")
+                   : QIcon(imagePath + "BlackRook.png");
+        break;
+    case KNIGHT:
+        icon = (color == WHITE_P)
+                   ? QIcon(imagePath + "WhiteKnight.png")
+                   : QIcon(imagePath + "BlackKnight.png");
+        break;
+    case BISHOP:
+        icon = (color == WHITE_P)
+                   ? QIcon(imagePath + "WhiteBishop.png")
+                   : QIcon(imagePath + "BlackBishop.png");
+        break;
+    case QUEEN:
+        icon = (color == WHITE_P)
+                   ? QIcon(imagePath + "WhiteQueen.png")
+                   : QIcon(imagePath + "BlackQueen.png");
+        break;
+    case KING:
+        icon = (color == WHITE_P)
+                   ? QIcon(imagePath + "WhiteKing.png")
+                   : QIcon(imagePath + "BlackKing.png");
+        break;
+    case PAWN:
+        icon = (color == WHITE_P)
+                   ? QIcon(imagePath + "WhitePawn.png")
+                   : QIcon(imagePath + "BlackPawn.png");
+        break;
+    }
+}
 
-struct Position {
-    int row;
-    int column;
-};
+PColor Piece::getColor() {
+    return color;
+}
 
+Position Piece::getPosition() {
+    return currentPiecePosition;
+}
 
-class Piece
-{
-public:
-    static Piece* createPiece(PieceType type, PColor color, Position currentPiecePosition);
-
-    virtual QIcon getIcon() const = 0;
-    PColor getColor();
-    Position getPosition();
-
-    virtual bool isValidMove(const Position& from, const Position& to) const = 0;
-    virtual ~Piece();
-
-protected:
-    Piece(PieceType type, PColor color, Position currentPiecePosition) : type(type), color(color), currentPiecePosition(currentPiecePosition) {
-        initIcon();
-    };
-
-    PieceType type;
-    PColor color;
-    Position currentPiecePosition;
-    QIcon icon;
-
-private:
-    void initIcon();
-};
-
-#endif // PIECE_H
